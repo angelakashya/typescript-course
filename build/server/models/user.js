@@ -4,7 +4,7 @@ function default_1(sequelize, DataTypes) {
     var User = sequelize.define('User', {
         id: {
             type: DataTypes.INTEGER,
-            primarykey: true,
+            primaryKey: true,
             autoIncrement: true
         },
         name: {

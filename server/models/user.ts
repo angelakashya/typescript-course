@@ -1,9 +1,8 @@
 export default function (sequelize, DataTypes) {
-
     const User = sequelize.define('User', {
         id: {
             type: DataTypes.INTEGER,
-            primarykey: true,
+            primaryKey: true,
             autoIncrement: true
         },
         name: {
