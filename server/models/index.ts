@@ -5,14 +5,15 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const config = require('../config/env/config')();
-const env = process.env.NODE_ENV || 'development';
+const env = config.env|| 'development';
 const db = {};
 
 let sequelize;
+
 if (config.dbURL) {
-  sequelize = new Sequelize(config.URL);
+  sequelize = new Sequelize(config.dbURL);
 } else {
-  sequelize = new Sequelize(config.db, config.username, config.password, config);
+  sequelize = new Sequelize(config.db, config.username, config.password);
 }
 
 fs
