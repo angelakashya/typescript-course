@@ -54,26 +54,37 @@ describe('Testes de Integração', () => {
     });
 
     describe('GET /api/users/:id', () => {
-        it('Deve retornar um Json com apenas um  Usuário', done => {
+        it('Deve retornar um Array com apenas um  Usuário', done => {
             request(app)
-                .get(`/api/users/${1}`)
+                .get(`/api/users/${userDefault.id}`)
                 .end((error, res) => {
                     expect(res.status).to.equal(HTTPStatus.OK);
+                    expect(res.body.payload.id).to.equal(userDefault.id);
+                    expect(res.body.payload).to.have.all.keys([
+                        'id', 'name', 'email', 'password'
+                    ]);
+                    id = res.body.payload.id;
                     done(error);
-                })
+                });
         });
     });
 
     describe('POST/api/users/create', () => {
         it('Deve criar um Usuário', done => {
             const user = {
-                nome: 'Teste',
-            }
+                id: 2,
+                name: 'Usuário Teste',
+                email: 'usuario@email.com',
+                password: 'novouser'
+            };
             request(app)
                 .post('/api/users/create')
                 .send(user)
                 .end((error, res) => {
                     expect(res.status).to.equal(HTTPStatus.OK);
+                    expect(res.body.payload.id).to.equal(user.id);
+                    expect(res.body.payload.name).to.equal(user.name);
+                    expect(res.body.payload.email).to.equal(user.email);
                     done(error);
                 })
         });
@@ -82,13 +93,16 @@ describe('Testes de Integração', () => {
     describe('PUT /api/users/:id/update', () => {
         it('Deve atualizar um Usuário', done => {
             const user = {
-                nome: 'TesteUpdate',
+                name: 'TesteUpdate',
+                email: 'update@email.com'
             }
             request(app)
-                .put(`api/users/${1}/update`)
+                .put(`api/users/${userTest}/update`)
                 .send(user)
                 .end((error, res) => {
                     expect(res.status).to.equal(HTTPStatus.OK);
+                    expect(userTest.name).to.equal(user.name);
+                    expect(userTest.email).to.equal(user.email);
                     done(error);
                 })
         });
@@ -96,9 +110,10 @@ describe('Testes de Integração', () => {
     describe('DELETE /api/users/:id/destroy', () => {
         it('Deve deletar um Usuário', done => {
             request(app)
-                .delete(`api/users/${1}/destroy`)
+                .delete(`api/users/${userTest}/destroy`)
                 .end((error, res) => {
                     expect(res.status).to.equal(HTTPStatus.OK);
+                    expect(userTest).to.equal(null);
                     done(error);
                 })
         });
