@@ -4,6 +4,41 @@ import { app, request, expect } from './config/helpers';
 
 describe('Testes de Integração', () => {
 
+    'use strict';
+    const config = require('../../server/config/env/config')();
+    const model = require('../../server/models');
+
+    let id;
+
+    const userTest = {
+        id: 100,
+        name: 'Usuário Teste',
+        email: 'teste@email.com',
+        password: 'teste'
+    };
+
+    const userDefault = {
+        id: 1,
+        name: 'Default User',
+        email: 'default@email.com',
+        password: 'default'
+    };
+
+    beforeEach((done) => {
+        model.User.destroy({
+            where: {}
+        })
+            .then(() => {
+                return model.User.create(userDefault);
+            })
+            .then(user => {
+                model.User.create(userTest)
+                    .then(() => {
+                        done();
+                    })
+            })
+    });
+
     describe('GET /api/users/all', () => {
         it('Deve retornar um Json com todos os Usuários', done => {
             request(app)
