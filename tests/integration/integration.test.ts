@@ -40,11 +40,14 @@ describe('Testes de Integração', () => {
     });
 
     describe('GET /api/users/all', () => {
-        it('Deve retornar um Json com todos os Usuários', done => {
+        it('Deve retornar um Array com todos os Usuários', done => {
             request(app)
                 .get('/api/users/all')
                 .end((error, res) => {
                     expect(res.status).to.equal(HTTPStatus.OK);
+                    expect(res.body.payload).to.be.an('array');
+                    expect(res.body.payload[0].name).to.be.equal(userDefault.name);
+                    expect(res.body.payload[0].email).to.be.equal(userDefault.email);
                     done(error);
                 })
         });
